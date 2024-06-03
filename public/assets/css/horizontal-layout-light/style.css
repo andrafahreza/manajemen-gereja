@@ -13491,7 +13491,8 @@ textarea.is-invalid.tt-hint, .select2-container--default .select2-selection--sin
   float: left;
   padding-right: var(--bs-breadcrumb-item-padding-x);
   color: var(--bs-breadcrumb-divider-color);
-  content: var(--bs-breadcrumb-divider, "https://demo.bootstrapdash.com/") /* rtl: var(--bs-breadcrumb-divider, "/") */;
+  /* content: var(--bs-breadcrumb-divider, "https://demo.bootstrapdash.com/")  */
+  /* rtl: var(--bs-breadcrumb-divider, "/"); */
 }
 .breadcrumb-item.active {
   color: var(--bs-breadcrumb-item-active-color);
@@ -20968,7 +20969,7 @@ input:focus {
   outline: none;
 }
 
-@font-face {
+/* @font-face {
   font-family: "Nunito";
   src: url("https://demo.bootstrapdash.com/skydash/themes/assets/fonts/Nunito/Nunito-Light.eot");
   src: url("https://demo.bootstrapdash.com/skydash/themes/assets/fonts/Nunito/Nunito-Light.eot?#iefix") format("embedded-opentype"), url("https://demo.bootstrapdash.com/skydash/themes/assets/fonts/Nunito/Nunito-Light.woff2") format("woff2"), url("https://demo.bootstrapdash.com/skydash/themes/assets/fonts/Nunito/Nunito-Light.woff") format("woff"), url("https://demo.bootstrapdash.com/skydash/themes/assets/fonts/Nunito/Nunito-Light.ttf") format("truetype");
@@ -20995,7 +20996,7 @@ input:focus {
   src: url("https://demo.bootstrapdash.com/skydash/themes/assets/fonts/Nunito/Nunito-Regular.eot?#iefix") format("embedded-opentype"), url("https://demo.bootstrapdash.com/skydash/themes/assets/fonts/Nunito/Nunito-Regular.woff2") format("woff2"), url("https://demo.bootstrapdash.com/skydash/themes/assets/fonts/Nunito/Nunito-Regular.woff") format("woff"), url("https://demo.bootstrapdash.com/skydash/themes/assets/fonts/Nunito/Nunito-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
-}
+} */
 .bg-twitter {
   background: #4747A1;
 }
@@ -21699,7 +21700,7 @@ code {
   position: absolute;
   z-index: -1;
 }
-.performance-overview-carousel .carousel-inner .item .icon.icon-a::before {
+/* .performance-overview-carousel .carousel-inner .item .icon.icon-a::before {
   content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-1.svg");
 }
 .performance-overview-carousel .carousel-inner .item .icon.icon-b::before {
@@ -21707,7 +21708,7 @@ code {
 }
 .performance-overview-carousel .carousel-inner .item .icon.icon-c::before {
   content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-3.svg");
-}
+} */
 .performance-overview-carousel .carousel-control-prev,
 .performance-overview-carousel .carousel-control-next {
   top: 1.3rem;
@@ -23382,7 +23383,7 @@ code {
   color: #ffffff;
 }
 .data-icon-card-primary .background-icon::before {
-  content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg");
+  /* content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg"); */
   position: absolute;
 }
 .data-icon-card-primary .background-icon i {
@@ -23398,7 +23399,7 @@ code {
   color: #ffffff;
 }
 .data-icon-card-secondary .background-icon::before {
-  content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg");
+  /* content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg"); */
   position: absolute;
 }
 .data-icon-card-secondary .background-icon i {
@@ -23414,7 +23415,7 @@ code {
   color: #ffffff;
 }
 .data-icon-card-success .background-icon::before {
-  content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg");
+  /* content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg"); */
   position: absolute;
 }
 .data-icon-card-success .background-icon i {
@@ -23430,7 +23431,7 @@ code {
   color: #ffffff;
 }
 .data-icon-card-info .background-icon::before {
-  content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg");
+  /* content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg"); */
   position: absolute;
 }
 .data-icon-card-info .background-icon i {
@@ -23446,7 +23447,7 @@ code {
   color: #ffffff;
 }
 .data-icon-card-warning .background-icon::before {
-  content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg");
+  /* content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg"); */
   position: absolute;
 }
 .data-icon-card-warning .background-icon i {
@@ -23462,7 +23463,7 @@ code {
   color: #ffffff;
 }
 .data-icon-card-danger .background-icon::before {
-  content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg");
+  /* content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg"); */
   position: absolute;
 }
 .data-icon-card-danger .background-icon i {
@@ -23478,7 +23479,7 @@ code {
   color: #ffffff;
 }
 .data-icon-card-light .background-icon::before {
-  content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg");
+  /* content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg"); */
   position: absolute;
 }
 .data-icon-card-light .background-icon i {
@@ -23494,7 +23495,7 @@ code {
   color: #ffffff;
 }
 .data-icon-card-dark .background-icon::before {
-  content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg");
+  /* content: url("https://demo.bootstrapdash.com/skydash/themes/assets/images/dashboard/shape-4.svg"); */
   position: absolute;
 }
 .data-icon-card-dark .background-icon i {
