@@ -72,6 +72,14 @@
                         <span class="menu-title">Pengumuman</span>
                     </a>
                 </li>
+                @if (auth()->check())
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('fakultas') }}">
+                            <i class="ti-medall menu-icon"></i>
+                            <span class="menu-title">Fakultas</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </div>
     </nav>
