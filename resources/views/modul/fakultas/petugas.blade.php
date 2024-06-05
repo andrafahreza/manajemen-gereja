@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="content-wrapper">
+        <a href="{{ route('fakultas') }}" class="btn btn-secondary text-white" style="margin-left: 65px">< Kembali</a>
         <div class="card m-5">
             <div class="card-body">
                 @if ($errors->any())
@@ -17,7 +18,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                <h4 class="card-title">Data Fakultas</h4>
+                <h4 class="card-title">Data Petugas {{ $fakultas->nama_fakultas }}</h4>
                 <button type="button" class="btn btn-primary" id="btnTambah">+ Tambah</button>
                 <div class="row mt-4">
                     <div class="col-12">
@@ -26,8 +27,10 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Fakultas</th>
-                                        <th>Petugas</th>
+                                        <th>Nama</th>
+                                        <th>Jabatan</th>
+                                        <th>Kontak</th>
+                                        <th>Anggota</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -35,10 +38,12 @@
                                     @foreach ($data as $key => $item)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $item->nama_fakultas }}</td>
-                                            <td>{{ $item->petugas->count() }}</td>
+                                            <td>{{ $item->nama }}</td>
+                                            <td>{{ $item->jabatan }}</td>
+                                            <td>{{ $item->kontak }}</td>
+                                            <td>{{ $item->anggota->count() }}</td>
                                             <td>
-                                                <a href="{{ route('petugas', ['id' => $item->id]) }}" class="btn btn-outline-success">Petugas</a>
+                                                <a href="{{ route('anggota', ['id' => $item->id]) }}" class="btn btn-outline-success">Anggota</a>
                                                 <button type="button" class="btn btn-outline-primary" onclick="edit({{ $item->id }})" id="btnEdit">Edit</button>
                                                 <button type="button" class="btn btn-outline-danger" onclick="hapus({{ $item->id }})" id="btnHapus">Hapus</button>
                                             </td>
@@ -53,14 +58,15 @@
         </div>
     </div>
 
-    <div class="modal fade modalFakultas" aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true">
+    <div class="modal fade modalPetugas" aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true">
         <div class="modal-dialog modal-l">
             <div class="modal-content">
-                <form action="{{ route('simpan-fakultas') }}" method="POST" id="formFakultas">
+                <form action="{{ route('simpan-petugas') }}" method="POST" id="formPetugas">
                     @csrf
                     <input type="hidden" name="id" id="id_save">
+                    <input type="hidden" name="fakultas_id" id="fakultas_id" value="{{ $fakultas->id }}">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalFullscreenLabel">Data Fakultas</h5>
+                        <h5 class="modal-title" id="exampleModalFullscreenLabel">Data Petugas</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -71,8 +77,16 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 mt-4">
-                                <label>Nama Fakultas <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="nama_fakultas" id="nama_fakultas" required>
+                                <label>Nama <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="nama" id="nama" required>
+                            </div>
+                            <div class="col-md-12 mt-4">
+                                <label>Jabatan <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="jabatan" id="jabatan" required>
+                            </div>
+                            <div class="col-md-12 mt-4">
+                                <label>kontak <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="kontak" id="kontak" required>
                             </div>
                         </div>
                     </div>
@@ -94,7 +108,7 @@
                         <h4 class="mb-3">Hapus Data!</h4>
                         <p class="text-muted mb-4"> Yakin ingin menghapus data ini? </p>
                         <div class="hstack gap-2 justify-content-center">
-                            <form action="{{ route('hapus-fakultas') }}" method="POST">
+                            <form action="{{ route('hapus-petugas') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="id" id="hapus_id">
                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
@@ -114,14 +128,14 @@
 
         <script>
             $('#btnTambah').on('click', function() {
-                $('#formFakultas')[0].reset();
+                $('#formPetugas')[0].reset();
                 $('#errorMessage').addClass('d-none');
-                $('.modalFakultas').modal('toggle');
+                $('.modalPetugas').modal('toggle');
             });
 
             function edit(id) {
-                $('#formFakultas')[0].reset();
-                var url = "{{ route('show-fakultas') }}" + "/" + id;
+                $('#formPetugas')[0].reset();
+                var url = "{{ route('show-petugas') }}" + "/" + id;
 
                 $.ajax({
                     type: "get",
@@ -129,13 +143,15 @@
                     dataType: "JSON",
                     success: function(response) {
                         if (response.alert == '1') {
-                            $('.modalFakultas').modal('toggle');
+                            $('.modalPetugas').modal('toggle');
                             $('#errorMessage').addClass('d-none');
 
                             const data = response.data;
-                            $('#formFakultas')[0].reset();
-                            $('#formFakultas').attr("action", "{{ route('simpan-fakultas') }}");
-                            $('#nama_fakultas').val(data.nama_fakultas);
+                            $('#formPetugas')[0].reset();
+                            $('#formPetugas').attr("action", "{{ route('simpan-petugas') }}");
+                            $('#nama').val(data.nama);
+                            $('#jabatan').val(data.jabatan);
+                            $('#kontak').val(data.kontak);
                             $('#id_save').val(data.id);
                         } else {
                             $('#errorMessage').removeClass('d-none');
