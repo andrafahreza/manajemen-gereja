@@ -67,7 +67,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="pages/widgets/widgets.html">
+                    <a class="nav-link @if ($title == 'Pengumuman') active @endif" href="{{ route('pengumuman') }}">
                         <i class="ti-clipboard menu-icon"></i>
                         <span class="menu-title">Pengumuman</span>
                     </a>

@@ -5,6 +5,7 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JadwalPelayanController;
+use App\Http\Controllers\PengumumanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, "index"])->name('index');
@@ -14,6 +15,7 @@ Route::post('login', [AuthController::class, "auth"])->name('login-auth');
 Route::get('jadwal', [JadwalPelayanController::class, "index"])->name('jadwal');
 Route::get('list-berita', [BeritaController::class, "index"])->name('berita');
 Route::get('lihat-berita/{id}', [BeritaController::class, "lihat"])->name('lihat-berita');
+Route::get('pengumuman', [PengumumanController::class, "index"])->name('pengumuman');
 
 Route::middleware('auth')->group(function() {
     Route::get('/logout', [AuthController::class, 'logout'])->name("logout");
@@ -50,5 +52,11 @@ Route::middleware('auth')->group(function() {
         Route::get('simpan/{id?}', [BeritaController::class, 'page'])->name("page-berita");
         Route::post('simpan', [BeritaController::class, 'simpan'])->name("simpan-berita");
         Route::post('hapus', [BeritaController::class, 'hapus'])->name("hapus-berita");
+    });
+
+    Route::prefix("pengumuman")->group(function() {
+        Route::post('/', [PengumumanController::class, 'simpan'])->name("simpan-pengumuman");
+        Route::get('show/{id?}', [PengumumanController::class, 'show'])->name("show-pengumuman");
+        Route::post('hapus', [PengumumanController::class, 'hapus'])->name("hapus-pengumuman");
     });
 });
