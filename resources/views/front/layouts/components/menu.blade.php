@@ -49,7 +49,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="pages/widgets/widgets.html">
+                    <a class="nav-link @if ($title == 'Berita') active @endif" href="{{ route('berita') }}">
                         <i class="ti-announcement menu-icon"></i>
                         <span class="menu-title">Berita</span>
                     </a>
@@ -61,7 +61,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="pages/widgets/widgets.html">
+                    <a class="nav-link @if ($title == 'Jadwal') active @endif" href="{{ route('jadwal') }}">
                         <i class="ti-calendar menu-icon"></i>
                         <span class="menu-title">Jadwal</span>
                     </a>
