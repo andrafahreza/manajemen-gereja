@@ -11,10 +11,15 @@ class Fakultas extends Model
 
     protected $table = "fakultas";
     protected $fillable = [
+        'prodi_id',
         'nama_fakultas',
     ];
 
     public function petugas(){
         return $this->hasMany(PetugasIbadah::class, "fakultas_id", "id");
+    }
+
+    public function prodi(){
+        return $this->belongsTo(Prodi::class, "prodi_id");
     }
 }

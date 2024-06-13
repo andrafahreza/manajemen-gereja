@@ -29,6 +29,12 @@ Route::middleware('auth')->group(function() {
         Route::get('show/{id?}', [FakultasController::class, 'show'])->name("show-fakultas");
         Route::post('hapus', [FakultasController::class, 'hapus'])->name("hapus-fakultas");
 
+        Route::prefix("prodi")->group(function() {
+            Route::post('/', [FakultasController::class, 'simpanProdi'])->name("simpan-prodi");
+            Route::post('hapus', [FakultasController::class, 'hapusProdi'])->name("hapus-prodi");
+            Route::get('show/{id?}', [FakultasController::class, 'showProdi'])->name("show-prodi");
+        });
+
         Route::prefix("petugas")->group(function() {
             Route::get('/list/{id?}', [FakultasController::class, 'petugas'])->name("petugas");
             Route::post('/simpan', [FakultasController::class, 'simpanPetugas'])->name("simpan-petugas");

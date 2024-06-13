@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Anggota;
 use App\Models\Fakultas;
 use App\Models\PetugasIbadah;
+use App\Models\Prodi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,8 +15,9 @@ class FakultasController extends Controller
     {
         $title = "Fakultas";
         $data = Fakultas::latest()->get();
+        $prodi = Prodi::latest()->get();
 
-        return view('modul.fakultas.index', compact('title', 'data'));
+        return view('modul.fakultas.index', compact('title', 'data', 'prodi'));
     }
 
     public function simpan(Request $request)
@@ -24,6 +26,7 @@ class FakultasController extends Controller
 
         try {
             $data = [
+                "prodi_id" => $request->prodi_id,
                 "nama_fakultas" => $request->nama_fakultas
             ];
 
@@ -89,6 +92,96 @@ class FakultasController extends Controller
     public function show($id = null)
     {
         $data = Fakultas::find($id);
+        if ($data == null || $id == null) {
+            abort(404);
+        }
+
+        try {
+            return response()->json([
+                'alert' => 1,
+                'data' => $data
+            ]);
+        } catch (\Throwable $th) {
+            $message = $th->getMessage();
+            return response()->json([
+                'alert' => 0,
+                'message' => "Terjadi kesalahan: $message"
+            ]);
+        }
+    }
+
+    // Prodi
+    public function simpanProdi(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $data = [
+                "nama_prodi" => $request->nama_prodi
+            ];
+
+            $id = $request->id;
+            $check = Prodi::where('nama_prodi', $request->nama_prodi)
+            ->where(function($query) use($id) {
+                if ($id != null) {
+                    $query->where('id', '!=', $id);
+                }
+            })
+            ->first();
+
+            if (!empty($check)) {
+                throw new \Exception("Prodi sudah pernah dibuat");
+            }
+
+            if ($id != null) {
+                $prodi = Prodi::find($id);
+                if (empty($prodi)) {
+                    throw new \Exception("Prodi tidak ditemukan");
+                }
+
+                if (!$prodi->update($data)) {
+                    throw new \Exception("Terjadi kesalahan saat memperbarui data prodi");
+                }
+            } else {
+                $prodi = Prodi::create($data);
+                if (!$prodi->save()) {
+                    throw new \Exception("Gagal menambahkan data prodi");
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with("success", "Berhasil menyimpan data prodi");
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($th->getMessage());
+        }
+    }
+
+    public function hapusProdi(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $data = Prodi::find($request->id);
+            if (!$data->delete()) {
+                throw new \Exception("Gagal menghapus data prodi");
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with("success", "Berhasil menghapus data prodi");
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($th->getMessage());
+        }
+    }
+
+    public function showProdi($id = null)
+    {
+        $data = Prodi::find($id);
         if ($data == null || $id == null) {
             abort(404);
         }
