@@ -7,6 +7,7 @@ use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JadwalPelayanController;
 use App\Http\Controllers\PengumumanController;
+use App\Http\Controllers\UserController;
 use App\Models\BiodataRomo;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,15 @@ Route::get('biodata-romo', [BiodataRomoController::class, "index"])->name('bioda
 
 Route::middleware('auth')->group(function() {
     Route::get('/logout', [AuthController::class, 'logout'])->name("logout");
+    Route::get('/profile', [UserController::class, 'profile'])->name("profile");
+
+    Route::prefix("user")->group(function() {
+        Route::get('/', [UserController::class, 'index'])->name("user");
+        Route::post('/', [UserController::class, 'simpan'])->name("simpan-user");
+        Route::get('show/{id?}', [UserController::class, 'show'])->name("show-user");
+        Route::post('hapus', [UserController::class, 'hapus'])->name("hapus-user");
+        Route::post('ganti-password', [UserController::class, 'gantiPassword'])->name("ganti-password");
+    });
 
     Route::prefix("fakultas")->group(function() {
         Route::get('/', [FakultasController::class, 'index'])->name("fakultas");
@@ -41,12 +51,12 @@ Route::middleware('auth')->group(function() {
             Route::get('show/{id?}', [FakultasController::class, 'showPetugas'])->name("show-petugas");
             Route::post('hapus', [FakultasController::class, 'hapusPetugas'])->name("hapus-petugas");
 
-            Route::prefix("anggota")->group(function() {
-                Route::get('/list/{id?}', [FakultasController::class, 'anggota'])->name("anggota");
-                Route::post('/simpan', [FakultasController::class, 'simpanAnggota'])->name("simpan-anggota");
-                Route::get('show/{id?}', [FakultasController::class, 'showAnggota'])->name("show-anggota");
-                Route::post('hapus', [FakultasController::class, 'hapusAnggota'])->name("hapus-anggota");
-            });
+            // Route::prefix("anggota")->group(function() {
+            //     Route::get('/list/{id?}', [FakultasController::class, 'anggota'])->name("anggota");
+            //     Route::post('/simpan', [FakultasController::class, 'simpanAnggota'])->name("simpan-anggota");
+            //     Route::get('show/{id?}', [FakultasController::class, 'showAnggota'])->name("show-anggota");
+            //     Route::post('hapus', [FakultasController::class, 'hapusAnggota'])->name("hapus-anggota");
+            // });
         });
     });
 
@@ -55,6 +65,7 @@ Route::middleware('auth')->group(function() {
         Route::get('show/{id?}', [JadwalPelayanController::class, 'show'])->name("show-jadwal");
         Route::post('hapus', [JadwalPelayanController::class, 'hapus'])->name("hapus-jadwal");
         Route::post('selesai', [JadwalPelayanController::class, 'selesai'])->name("selesai-jadwal");
+        Route::post('kolekte', [JadwalPelayanController::class, 'kolekte'])->name("kolekte-jadwal");
         });
 
     Route::prefix("berita")->group(function() {

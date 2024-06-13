@@ -39,7 +39,7 @@
                             <div id="quillExample1" class="quill-container">
                             </div>
                         <div class="col-4 mt-4">
-                            <textarea style="display: none" id="isi" name="isi">{{ $data->isi }}</textarea>
+                            <textarea style="display: none" id="isi" name="isi">@if (!empty($data)) {{ $data->isi }} @endif</textarea>
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </form>

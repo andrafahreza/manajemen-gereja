@@ -18,6 +18,7 @@
                     </div>
                 @endif
                 <h4 class="card-title">Jadwal Pelayanan</h4>
+                <p>Kolekte Terkumpul: Rp. {{ number_format($data->sum('kolekte')) }}</p>
                 @if (auth()->check())
                     <button type="button" class="btn btn-primary" id="btnTambah">+ Tambah</button>
                 @endif
@@ -29,8 +30,10 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Nama Kegiatan</th>
+                                        <th>Jenis Pelayanan</th>
                                         <th>Jadwal Pelayanan</th>
                                         <th>Fakultas</th>
+                                        <th>Kolekte</th>
                                         <th>Status</th>
                                         @if (auth()->check())
                                             <th>Actions</th>
@@ -42,8 +45,14 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $item->nama_jadwal }}</td>
+                                            <td>{{ $item->jenis_pelayanan }}</td>
                                             <td>{{ \App\Http\Controllers\Controller::formatDate($item->jadwal) }}</td>
                                             <td>{{ $item->fakultas->nama_fakultas }}</td>
+                                            <td>
+                                                @if ($item->kolekte != null)
+                                                    Rp. {{ number_format($item->kolekte) }}
+                                                @endif
+                                            </td>
                                             <td>
                                                 @if ($item->status == 'belum_dimulai')
                                                     <span class="badge bg-warning">Belum Selesai</span>
@@ -53,6 +62,8 @@
                                             </td>
                                             @if (auth()->check())
                                                 <td>
+                                                    <button type="button" class="btn btn-outline-success" onclick="kolekte({{ $item->id }})" id="btnKolekte">Kolekte</button>
+
                                                     @if ($item->status == "belum_dimulai" && strtotime(now()) > strtotime($item->jadwal))
                                                         <button type="button" class="btn btn-outline-warning" onclick="selesai({{ $item->id }})" id="btnSelesai">Selesai</button>
                                                     @endif
@@ -105,8 +116,48 @@
                                 <input type="text" class="form-control" name="nama_jadwal" id="nama_jadwal" required>
                             </div>
                             <div class="col-md-12 mt-4">
+                                <label>Jenis Pelayanan <span class="text-danger">*</span></label>
+                                <select class="form-control" name="jenis_pelayanan" required>
+                                    <option value="">Pilih Jenis Pelayanan</option>
+                                    <option value="Misdinar">Misdinar</option>
+                                    <option value="Bacaan">Bacaan</option>
+                                    <option value="Mazmur">Mazmur</option>
+                                    <option value="Doa Umat">Doa Umat</option>
+                                    <option value="Persembahan">Persembahan</option>
+                                    <option value="Drigjen">Drigjen</option>
+                                    <option value="Organis">Organis</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mt-4">
                                 <label>Jadwal <span class="text-danger">*</span></label>
                                 <input type="datetime-local" class="form-control" name="jadwal" id="jadwal" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0);" class="btn btn-link link-danger fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Tutup</a>
+                        <button type="submit" class="btn btn-primary ">Simpan</button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade modalKolekte" aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true">
+        <div class="modal-dialog modal-l">
+            <div class="modal-content">
+                <form action="{{ route('kolekte-jadwal') }}" method="POST" id="formKolekte">
+                    @csrf
+                    <input type="hidden" name="id" id="id_kolekte">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalFullscreenLabel">Data Kolekte</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 mt-4">
+                                <label>Jumlah Kolekte <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="kolekte" id="kolekte" required>
                             </div>
                         </div>
                     </div>
@@ -194,6 +245,7 @@
                             $('#nama_jadwal').val(data.nama_jadwal);
                             $('#fakultas_id').val(data.fakultas_id);
                             $('#jadwal').val(data.jadwal);
+                            $('#jenis_pelayanan').val(data.jenis_pelayanan);
                             $('#id_save').val(data.id);
                         } else {
                             $('#errorMessage').removeClass('d-none');
@@ -210,6 +262,11 @@
             function hapus(id) {
                 $('#hapus_id').val(id);
                 $('.hapus').modal('toggle');
+            }
+
+            function kolekte(id) {
+                $('#id_kolekte').val(id);
+                $('.modalKolekte').modal('toggle');
             }
 
             function selesai(id) {

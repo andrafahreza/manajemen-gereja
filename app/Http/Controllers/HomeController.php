@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Berita;
 use App\Models\Fakultas;
 use App\Models\JadwalPelayan;
+use App\Models\Pengumuman;
 use App\Models\PetugasIbadah;
 use Illuminate\Http\Request;
 
@@ -41,6 +43,10 @@ class HomeController extends Controller
             ];
         }
 
-        return view('front.index', compact('title', 'data', 'jadwalTerdekat', 'petugas'));
+        $berita = Berita::latest()->limit(3)->get();
+        $jadwal = JadwalPelayan::latest()->get();
+        $pengumuman = Pengumuman::latest()->get();
+
+        return view('front.index', compact('title', 'data', 'jadwalTerdekat', 'petugas', 'berita', 'jadwal', 'pengumuman'));
     }
 }

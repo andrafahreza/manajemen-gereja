@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="content-wrapper">
-        <a href="{{ route('fakultas') }}" class="btn btn-secondary text-white" style="margin-left: 65px">< Kembali</a>
         <div class="card m-5">
             <div class="card-body">
                 @if ($errors->any())
@@ -18,8 +17,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                <h4 class="card-title">Data Petugas {{ $fakultas->nama_fakultas }}</h4>
-                <button type="button" class="btn btn-primary" id="btnTambah">+ Tambah</button>
+                <h4 class="card-title">User</h4>
+                @if (auth()->check())
+                    <button type="button" class="btn btn-primary" id="btnTambah">+ Tambah</button>
+                @endif
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="table-responsive">
@@ -27,26 +28,27 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama</th>
-                                        <th>Npm</th>
-                                        <th>Kontak</th>
-                                        {{-- <th>Anggota</th> --}}
-                                        <th>Actions</th>
+                                        <th>Username</th>
+                                        <th>Role Akun</th>
+                                        <th>Fakultas</th>
+                                        @if (auth()->check())
+                                            <th>Actions</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($data as $key => $item)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $item->nama }}</td>
-                                            <td>{{ $item->npm }}</td>
-                                            <td>{{ $item->kontak }}</td>
-                                            {{-- <td>{{ $item->anggota->count() }}</td> --}}
-                                            <td>
-                                                {{-- <a href="{{ route('anggota', ['id' => $item->id]) }}" class="btn btn-outline-success">Anggota</a> --}}
-                                                <button type="button" class="btn btn-outline-primary" onclick="edit({{ $item->id }})" id="btnEdit">Edit</button>
-                                                <button type="button" class="btn btn-outline-danger" onclick="hapus({{ $item->id }})" id="btnHapus">Hapus</button>
-                                            </td>
+                                            <td>{{ $item->username }}</td>
+                                            <td>{{ $item->role }}</td>
+                                            <td>{{ $item->fakultas->nama_fakultas }}</td>
+                                            @if (auth()->check())
+                                                <td>
+                                                    <button type="button" class="btn btn-outline-primary" onclick="edit({{ $item->id }})" id="btnEdit">Edit</button>
+                                                    <button type="button" class="btn btn-outline-danger" onclick="hapus({{ $item->id }})" id="btnHapus">Hapus</button>
+                                                </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -58,15 +60,14 @@
         </div>
     </div>
 
-    <div class="modal fade modalPetugas" aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true">
+    <div class="modal fade modalUser" aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true">
         <div class="modal-dialog modal-l">
             <div class="modal-content">
-                <form action="{{ route('simpan-petugas') }}" method="POST" id="formPetugas">
+                <form action="{{ route('simpan-user') }}" method="POST" id="formUser">
                     @csrf
                     <input type="hidden" name="id" id="id_save">
-                    <input type="hidden" name="fakultas_id" id="fakultas_id" value="{{ $fakultas->id }}">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalFullscreenLabel">Data Petugas</h5>
+                        <h5 class="modal-title" id="exampleModalFullscreenLabel">Data User</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -77,16 +78,29 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 mt-4">
-                                <label>Nama <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="nama" id="nama" required>
+                                <label>Username <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="username" id="username" required>
                             </div>
                             <div class="col-md-12 mt-4">
-                                <label>npm <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="npm" id="npm" required>
+                                <label>Password <span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" name="password" required>
                             </div>
                             <div class="col-md-12 mt-4">
-                                <label>kontak <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="kontak" id="kontak" required>
+                                <label>Role <span class="text-danger">*</span></label>
+                                <select class="form-control" name="role" id="role" required>
+                                    <option value="">Pilih Role</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="fakultas">Fakultas</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mt-4">
+                                <label>Fakultas</label>
+                                <select class="form-control" name="fakultas_id" id="fakultas_id">
+                                    <option value="">Pilih Fakultas</option>
+                                    @foreach ($fakultas as $item)
+                                        <option value="{{ $item->id }}">{{ $item->nama_fakultas }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -108,7 +122,7 @@
                         <h4 class="mb-3">Hapus Data!</h4>
                         <p class="text-muted mb-4"> Yakin ingin menghapus data ini? </p>
                         <div class="hstack gap-2 justify-content-center">
-                            <form action="{{ route('hapus-petugas') }}" method="POST">
+                            <form action="{{ route('hapus-user') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="id" id="hapus_id">
                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
@@ -128,14 +142,14 @@
 
         <script>
             $('#btnTambah').on('click', function() {
-                $('#formPetugas')[0].reset();
+                $('#formUser')[0].reset();
                 $('#errorMessage').addClass('d-none');
-                $('.modalPetugas').modal('toggle');
+                $('.modalUser').modal('toggle');
             });
 
             function edit(id) {
-                $('#formPetugas')[0].reset();
-                var url = "{{ route('show-petugas') }}" + "/" + id;
+                $('#formUser')[0].reset();
+                var url = "{{ route('show-user') }}" + "/" + id;
 
                 $.ajax({
                     type: "get",
@@ -143,15 +157,15 @@
                     dataType: "JSON",
                     success: function(response) {
                         if (response.alert == '1') {
-                            $('.modalPetugas').modal('toggle');
+                            $('.modalUser').modal('toggle');
                             $('#errorMessage').addClass('d-none');
 
                             const data = response.data;
-                            $('#formPetugas')[0].reset();
-                            $('#formPetugas').attr("action", "{{ route('simpan-petugas') }}");
-                            $('#nama').val(data.nama);
-                            $('#npm').val(data.npm);
-                            $('#kontak').val(data.kontak);
+                            $('#formUser')[0].reset();
+                            $('#formUser').attr("action", "{{ route('simpan-user') }}");
+                            $('#username').val(data.username);
+                            $('#role').val(data.role);
+                            $('#fakultas').val(data.fakultas);
                             $('#id_save').val(data.id);
                         } else {
                             $('#errorMessage').removeClass('d-none');

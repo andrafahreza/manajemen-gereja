@@ -10,11 +10,12 @@
                         <li class="nav-item nav-profile dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
                                 id="profileDropdown">
-                                <img src="/assets/images/faces/face28.jpg" alt="profile" />
+                                <img src="/user.png" alt="profile" />
+                                <span>{{ auth()->user()->username }}</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
                                 aria-labelledby="profileDropdown">
-                                <a class="dropdown-item">
+                                <a href="{{ route('profile') }}" class="dropdown-item">
                                     <i class="ti-settings text-primary"></i>
                                     Settings
                                 </a>
@@ -79,6 +80,14 @@
                             <span class="menu-title">Fakultas</span>
                         </a>
                     </li>
+                    @if (auth()->user()->role == "admin")
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('user') }}">
+                                <i class="ti-user menu-icon"></i>
+                                <span class="menu-title">User</span>
+                            </a>
+                        </li>
+                    @endif
                 @endif
             </ul>
         </div>

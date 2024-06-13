@@ -27,6 +27,7 @@ class JadwalPelayanController extends Controller
                 "fakultas_id" => $request->fakultas_id,
                 "nama_jadwal" => $request->nama_jadwal,
                 "jadwal" => $request->jadwal,
+                "jenis_pelayanan" => $request->jenis_pelayanan,
                 "status" => "belum_dimulai",
             ];
 
@@ -52,6 +53,31 @@ class JadwalPelayanController extends Controller
 
             return redirect()->back()->with("success", "Berhasil menyimpan data jadwal");
 
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($th->getMessage());
+        }
+    }
+
+    public function kolekte(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $data = JadwalPelayan::find($request->id);
+            if (empty($data)) {
+                throw new \Exception("Jadwal tidak ditemukan");
+            }
+
+            $data->kolekte = (int)$request->kolekte;
+
+            if (!$data->update()) {
+                throw new \Exception("Gagal menyimpan kolekte");
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with("success", "Berhasil menyimpan kolekte");
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->back()->withErrors($th->getMessage());

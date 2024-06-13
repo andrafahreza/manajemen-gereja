@@ -15,6 +15,8 @@ class JadwalPelayan extends Model
         'nama_jadwal',
         'jadwal',
         'status',
+        'kolekte',
+        'jenis_pelayanan'
     ];
 
     public function fakultas(){

@@ -20,7 +20,9 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Data Fakultas</h4>
-                        <button type="button" class="btn btn-primary" id="btnTambah">+ Tambah</button>
+                        @if (auth()->user()->role == "fakultas")
+                            <button type="button" class="btn btn-primary" id="btnTambah">+ Tambah</button>
+                        @endif
                         <div class="row mt-4">
                             <div class="col-12">
                                 <div class="table-responsive">
@@ -47,8 +49,10 @@
                                                     <td>{{ $item->petugas->count() }}</td>
                                                     <td>
                                                         <a href="{{ route('petugas', ['id' => $item->id]) }}" class="btn btn-outline-success">Petugas</a>
-                                                        <button type="button" class="btn btn-outline-primary" onclick="edit({{ $item->id }})" id="btnEdit">Edit</button>
-                                                        <button type="button" class="btn btn-outline-danger" onclick="hapus({{ $item->id }})" id="btnHapus">Hapus</button>
+                                                        @if (auth()->user()->role == "fakultas")
+                                                            <button type="button" class="btn btn-outline-primary" onclick="edit({{ $item->id }})" id="btnEdit">Edit</button>
+                                                            <button type="button" class="btn btn-outline-danger" onclick="hapus({{ $item->id }})" id="btnHapus">Hapus</button>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach

@@ -222,7 +222,7 @@ class FakultasController extends Controller
             $data = [
                 "fakultas_id" => $request->fakultas_id,
                 "nama" => $request->nama,
-                "jabatan" => $request->jabatan,
+                "npm" => $request->npm,
                 "kontak" => $request->kontak,
             ];
 

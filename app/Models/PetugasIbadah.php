@@ -13,7 +13,7 @@ class PetugasIbadah extends Model
     protected $fillable = [
         'fakultas_id',
         'nama',
-        'jabatan',
+        'npm',
         'kontak',
     ];
 
